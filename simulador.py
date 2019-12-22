@@ -48,13 +48,15 @@ with open('sistema.csv', mode='w') as tabela_sistema:
 	C=CLOCK
 	PROX_UTENTE="-"
 	INDEX_PROX_UTENTE=0
-										#FASE 1
-	TEMPO_F1="-"
+
+				
+	TEMPO_F1="-"						#FASE 1
+
 	ESTADO_F1="LIVRE"
 	PARTIDA_F1="-"
 	LISTA_F1=[]
-										#FASE 2
-	TEMPO_F2="-"
+				
+	TEMPO_F2="-"						#FASE 2
 										#ASSUNTO A COM 2 BALCOES
 	ESTADO_F2A1="LIVRE"
 	ESTADO_F2A2="LIVRE"
@@ -71,12 +73,18 @@ with open('sistema.csv', mode='w') as tabela_sistema:
 	ESTADO_F2C="LIVRE"
 	PARTIDA_F2C="-"
 	LISTA_F2C=[]
+				
+	TEMPO_F3="-"						#FASE 3
+
+	ESTADO_F3="LIVRE"
+	PARTIDA_F3="-"
+	LISTA_F3=[]
 
 	
 	print("ciclo")
 	
 
-	while C < tempo_final:
+	while (C < tempo_final) or (len(LISTA_EVENTO) != 0):          #até o clock acabar ou até que não haja mais cientes para atender
 		if encontrar_tempo_lst(LISTA_EVENTO,C):
 			LISTA_EVENTO = sorted(LISTA_EVENTO, key=lambda element: (element[0], element[2]))
 			
@@ -90,6 +98,59 @@ with open('sistema.csv', mode='w') as tabela_sistema:
 				LISTA_EVENTO.append((int(PROX_CHEGADA),"CH",PROX))
 				INDEX_PROX_UTENTE += 1
 
+
+			if (EVENTO[1] == "PF2A1") :
+				ESTADO_F2A1="LIVRE"
+				PARTIDA_F2A1 = "-"
+				LISTA_F2A.sort(key=lambda tup: tup[0])
+				if(len(LISTA_F2A) != 0):
+					EVENTO = LISTA_F2A.pop(0)
+					ESTADO_F2A1="OCUPADO"
+					PARTIDA_F2A1 = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][2])
+					LISTA_EVENTO.append((int(PARTIDA_F2A1),"PF2A1",EVENTO[2]))
+
+			if (EVENTO[1] == "PF2A2") :
+				ESTADO_F2A2="LIVRE"
+				PARTIDA_F2A2 = "-"
+				LISTA_F2A.sort(key=lambda tup: tup[0])
+				if(len(LISTA_F2A) != 0):
+					EVENTO = LISTA_F2A.pop(0)
+					ESTADO_F2A2="OCUPADO"
+					PARTIDA_F2A2 = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][2])
+					LISTA_EVENTO.append((int(PARTIDA_F2A2),"PF2A2",EVENTO[2]))
+
+			if (EVENTO[1] == "PF2B1") :
+				ESTADO_F2B1="LIVRE"
+				PARTIDA_F2B1 = "-"
+				LISTA_F2B.sort(key=lambda tup: tup[0])
+				if(len(LISTA_F2B) != 0):
+					EVENTO = LISTA_F2B.pop(0)
+					ESTADO_F2B1="OCUPADO"
+					PARTIDA_F2B1 = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][2])
+					LISTA_EVENTO.append((int(PARTIDA_F2B1),"PF2B1",EVENTO[2]))
+
+			if (EVENTO[1] == "PF2B2") :
+				ESTADO_F2B2="LIVRE"
+				PARTIDA_F2B2 = "-"
+				LISTA_F2B.sort(key=lambda tup: tup[0])
+				if(len(LISTA_F2B) != 0):
+					EVENTO = LISTA_F2B.pop(0)
+					ESTADO_F2B2="OCUPADO"
+					PARTIDA_F2B2 = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][2])
+					LISTA_EVENTO.append((int(PARTIDA_F2B2),"PF2B2",EVENTO[2]))
+
+			if (EVENTO[1] == "PF2C") :
+				ESTADO_F2C="LIVRE"
+				PARTIDA_F2C = "-"
+				LISTA_F2C.sort(key=lambda tup: tup[0])
+				if(len(LISTA_F2C) != 0):
+					EVENTO = LISTA_F2C.pop(0)
+					ESTADO_F2C="OCUPADO"
+					PARTIDA_F2C = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][2])
+					LISTA_EVENTO.append((int(PARTIDA_F2C),"PF2C",EVENTO[2]))
+
+
+
 			if (EVENTO[1] == "PF1") :
 				ESTADO_F1="LIVRE"
 				PARTIDA_F1 = "-"
@@ -99,6 +160,52 @@ with open('sistema.csv', mode='w') as tabela_sistema:
 					ESTADO_F1="OCUPADO"
 					PARTIDA_F1 = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][2])
 					LISTA_EVENTO.append((int(PARTIDA_F1),"PF1",EVENTO[2]))
+				if (lista_utentes[int(EVENTO[2].split(" ")[1])-1][5] == "A") :
+					if (ESTADO_F2A1 == "LIVRE"):
+						ESTADO_F2A1="OCUPADO"
+						PARTIDA_F2A1 = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][3])
+						LISTA_EVENTO.append((int(PARTIDA_F2A1),"PF2A1",EVENTO[2]))
+						LISTA_EVENTO = sorted(LISTA_EVENTO, key=lambda element: (element[0], element[2]))
+					elif (ESTADO_F2A2 == "LIVRE") :
+						ESTADO_F2A2="OCUPADO"
+						PARTIDA_F2A2 = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][3])
+						LISTA_EVENTO.append((int(PARTIDA_F2A2),"PF2A2",EVENTO[2]))
+						LISTA_EVENTO = sorted(LISTA_EVENTO, key=lambda element: (element[0], element[2]))
+					else:
+						LISTA_F2A.append((int(C),"PF2A",EVENTO[2]))
+						LISTA_F2A = sorted(LISTA_F2B, key=lambda element: (element[2], element[0]))
+				elif (lista_utentes[int(EVENTO[2].split(" ")[1])-1][5] == "B") :
+					if (ESTADO_F2B1 == "LIVRE"):
+						ESTADO_F2B1="OCUPADO"
+						PARTIDA_F2B1 = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][3])
+						LISTA_EVENTO.append((int(PARTIDA_F2B1),"PF2B1",EVENTO[2]))
+						LISTA_EVENTO = sorted(LISTA_EVENTO, key=lambda element: (element[0], element[2]))
+					elif (ESTADO_F2B2 == "LIVRE") :
+						ESTADO_F2B2="OCUPADO"
+						PARTIDA_F2B2 = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][3])
+						LISTA_EVENTO.append((int(PARTIDA_F2B2),"PF2B2",EVENTO[2]))
+						LISTA_EVENTO = sorted(LISTA_EVENTO, key=lambda element: (element[0], element[2]))
+					else:
+						LISTA_F2B.append((int(C),"PF2B",EVENTO[2]))
+						LISTA_F2B = sorted(LISTA_F2B, key=lambda element: (element[2], element[0]))
+				elif (lista_utentes[int(EVENTO[2].split(" ")[1])-1][5] == "C") :
+					if (ESTADO_F2C == "LIVRE"):
+						ESTADO_F2C="OCUPADO"
+						PARTIDA_F2C = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][3])
+						LISTA_EVENTO.append((int(PARTIDA_F2C),"PF2C",EVENTO[2]))
+						LISTA_EVENTO = sorted(LISTA_EVENTO, key=lambda element: (element[0], element[2]))
+					else:
+						LISTA_F2C.append((int(C),"PF2C",EVENTO[2]))
+						LISTA_F2C = sorted(LISTA_F2C, key=lambda element: (element[2], element[0]))
+				else:        #ASSUNTO -, nao passa por esta fase, vai para a fase 3
+					if (ESTADO_F3 == "LIVRE"):
+						ESTADO_F3="OCUPADO"
+						PARTIDA_F3 = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][3])
+						LISTA_EVENTO.append((int(PARTIDA_F3),"PF3",EVENTO[2]))
+						LISTA_EVENTO = sorted(LISTA_EVENTO, key=lambda element: (element[0], element[2]))
+					else:
+						LISTA_F3.append((int(C),"PF3",EVENTO[2]))
+						LISTA_F3 = sorted(LISTA_F3, key=lambda element: (element[2], element[0]))
 
 					
 
