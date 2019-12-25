@@ -8,8 +8,10 @@ def encontrar_tempo_lst(lst,elem):
 			return True
 	return False
 
+file_to_read = 'tabela_utentes.csv'
+file_to_write= 'sistema.csv'
 
-with open('tabela_utentes.csv') as csv_file:
+with open(file_to_read) as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     line_count = 0
     for row in csv_reader:
@@ -30,7 +32,7 @@ with open('tabela_utentes.csv') as csv_file:
             line_count += 1
 print(f' -> {line_count} Utentes passarão pelo Sistema')
 #print(lista_utentes)
-with open('sistema.csv', mode='w') as tabela_sistema:
+with open(file_to_write, mode='w') as tabela_sistema:
 	fieldnames = ['CLOCK', 'TIPO EVENTO', 'UTENTE', 'PROX_CHEGADA', 'LISTA_F1', 'ESTADO_F1', 'PARTIDA_F1', 'LISTA_F2A', 'ESTADO_F2A1', 'PARTIDA_F2A1', 'ESTADO_F2A2', 'PARTIDA_F2A2', 'LISTA_F2B', 'ESTADO_F2B1', 'PARTIDA_F2B1', 'ESTADO_F2B2', 'PARTIDA_F2B2', 'LISTA_F2C', 'ESTADO_F2C', 'PARTIDA_F2C', 'LISTA_F3', 'ESTADO_F3', 'PARTIDA_F3']
 	sistema_writer = csv.DictWriter(tabela_sistema , fieldnames=fieldnames)
 
@@ -93,12 +95,14 @@ with open('sistema.csv', mode='w') as tabela_sistema:
 			EVENTO = LISTA_EVENTO[0]
 			UTENTE = EVENTO[2]
 
-			if  ((INDEX_PROX_UTENTE < line_count-1) and (EVENTO[1] == "CH" or EVENTO[1] == "INICIO")) and  (PROX_CHEGADA != lista_utentes[INDEX_PROX_UTENTE][1] or PROX_CHEGADA == C) :
+			if  ((INDEX_PROX_UTENTE < line_count-1) and (EVENTO[1] == "CH" or EVENTO[1] == "INICIO")) and  (int(PROX_CHEGADA) <= C or PROX_CHEGADA != lista_utentes[INDEX_PROX_UTENTE][1]) :
 				PROX_UTENTE=lista_utentes[INDEX_PROX_UTENTE]
 				PROX_CHEGADA=PROX_UTENTE[1]
 				PROX=PROX_UTENTE[0]
 				LISTA_EVENTO.append((int(PROX_CHEGADA),"CH",PROX))
 				LISTA_EVENTO = sorted(LISTA_EVENTO, key=lambda element: (element[0], element[2]))
+				EVENTO = LISTA_EVENTO[0]
+				UTENTE = EVENTO[2]
 				INDEX_PROX_UTENTE += 1
 
 			if (EVENTO[1] == "PF3") :
@@ -117,15 +121,17 @@ with open('sistema.csv', mode='w') as tabela_sistema:
 				ESTADO_F2A1="LIVRE"
 				PARTIDA_F2A1 = "-"
 				LISTA_F2A.sort(key=lambda tup: tup[0])
+
+				if(int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][6]) != 0):
 				
-				if (ESTADO_F3 == "LIVRE"):
-					ESTADO_F3="OCUPADO"
-					PARTIDA_F3 = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][6])
-					LISTA_EVENTO.append((int(PARTIDA_F3),"PF3",EVENTO[2]))
-					LISTA_EVENTO = sorted(LISTA_EVENTO, key=lambda element: (element[0], element[2]))
-				else:
-					LISTA_F3.append((int(C),"PF3",EVENTO[2]))
-					LISTA_F3 = sorted(LISTA_F3, key=lambda element: (element[2], element[0]))
+					if (ESTADO_F3 == "LIVRE"):
+						ESTADO_F3="OCUPADO"
+						PARTIDA_F3 = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][6])
+						LISTA_EVENTO.append((int(PARTIDA_F3),"PF3",EVENTO[2]))
+						LISTA_EVENTO = sorted(LISTA_EVENTO, key=lambda element: (element[0], element[2]))
+					else:
+						LISTA_F3.append((int(C),"PF3",EVENTO[2]))
+						LISTA_F3 = sorted(LISTA_F3, key=lambda element: (element[2], element[0]))
 
 				if(len(LISTA_F2A) != 0):
 					EVENTO = LISTA_F2A.pop(0)
@@ -140,14 +146,16 @@ with open('sistema.csv', mode='w') as tabela_sistema:
 				PARTIDA_F2A2 = "-"
 				LISTA_F2A.sort(key=lambda tup: tup[0])
 				
-				if (ESTADO_F3 == "LIVRE"):
-					ESTADO_F3="OCUPADO"
-					PARTIDA_F3 = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][6])
-					LISTA_EVENTO.append((int(PARTIDA_F3),"PF3",EVENTO[2]))
-					LISTA_EVENTO = sorted(LISTA_EVENTO, key=lambda element: (element[0], element[2]))
-				else:
-					LISTA_F3.append((int(C),"PF3",EVENTO[2]))
-					LISTA_F3 = sorted(LISTA_F3, key=lambda element: (element[2], element[0]))
+				if(int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][6]) != 0):
+
+					if (ESTADO_F3 == "LIVRE"):
+						ESTADO_F3="OCUPADO"
+						PARTIDA_F3 = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][6])
+						LISTA_EVENTO.append((int(PARTIDA_F3),"PF3",EVENTO[2]))
+						LISTA_EVENTO = sorted(LISTA_EVENTO, key=lambda element: (element[0], element[2]))
+					else:
+						LISTA_F3.append((int(C),"PF3",EVENTO[2]))
+						LISTA_F3 = sorted(LISTA_F3, key=lambda element: (element[2], element[0]))
 
 				if(len(LISTA_F2A) != 0):
 					EVENTO = LISTA_F2A.pop(0)
@@ -161,14 +169,16 @@ with open('sistema.csv', mode='w') as tabela_sistema:
 				PARTIDA_F2B1 = "-"
 				LISTA_F2B.sort(key=lambda tup: tup[0])
 				
-				if (ESTADO_F3 == "LIVRE"):
-					ESTADO_F3="OCUPADO"
-					PARTIDA_F3 = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][6])
-					LISTA_EVENTO.append((int(PARTIDA_F3),"PF3",EVENTO[2]))
-					LISTA_EVENTO = sorted(LISTA_EVENTO, key=lambda element: (element[0], element[2]))
-				else:
-					LISTA_F3.append((int(C),"PF3",EVENTO[2]))
-					LISTA_F3 = sorted(LISTA_F3, key=lambda element: (element[2], element[0]))
+				if(int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][6]) != 0):
+
+					if (ESTADO_F3 == "LIVRE"):
+						ESTADO_F3="OCUPADO"
+						PARTIDA_F3 = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][6])
+						LISTA_EVENTO.append((int(PARTIDA_F3),"PF3",EVENTO[2]))
+						LISTA_EVENTO = sorted(LISTA_EVENTO, key=lambda element: (element[0], element[2]))
+					else:
+						LISTA_F3.append((int(C),"PF3",EVENTO[2]))
+						LISTA_F3 = sorted(LISTA_F3, key=lambda element: (element[2], element[0]))
 
 				if(len(LISTA_F2B) != 0):
 					EVENTO = LISTA_F2B.pop(0)
@@ -182,14 +192,16 @@ with open('sistema.csv', mode='w') as tabela_sistema:
 				PARTIDA_F2B2 = "-"
 				LISTA_F2B.sort(key=lambda tup: tup[0])
 				
-				if (ESTADO_F3 == "LIVRE"):
-					ESTADO_F3="OCUPADO"
-					PARTIDA_F3 = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][6])
-					LISTA_EVENTO.append((int(PARTIDA_F3),"PF3",EVENTO[2]))
-					LISTA_EVENTO = sorted(LISTA_EVENTO, key=lambda element: (element[0], element[2]))
-				else:
-					LISTA_F3.append((int(C),"PF3",EVENTO[2]))
-					LISTA_F3 = sorted(LISTA_F3, key=lambda element: (element[2], element[0]))
+				if(int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][6]) != 0):
+
+					if (ESTADO_F3 == "LIVRE"):
+						ESTADO_F3="OCUPADO"
+						PARTIDA_F3 = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][6])
+						LISTA_EVENTO.append((int(PARTIDA_F3),"PF3",EVENTO[2]))
+						LISTA_EVENTO = sorted(LISTA_EVENTO, key=lambda element: (element[0], element[2]))
+					else:
+						LISTA_F3.append((int(C),"PF3",EVENTO[2]))
+						LISTA_F3 = sorted(LISTA_F3, key=lambda element: (element[2], element[0]))
 
 				if(len(LISTA_F2B) != 0):
 					EVENTO = LISTA_F2B.pop(0)
@@ -204,14 +216,16 @@ with open('sistema.csv', mode='w') as tabela_sistema:
 				PARTIDA_F2C = "-"
 				LISTA_F2C.sort(key=lambda tup: tup[0])
 				
-				if (ESTADO_F3 == "LIVRE"):
-					ESTADO_F3="OCUPADO"
-					PARTIDA_F3 = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][6])
-					LISTA_EVENTO.append((int(PARTIDA_F3),"PF3",EVENTO[2]))
-					LISTA_EVENTO = sorted(LISTA_EVENTO, key=lambda element: (element[0], element[2]))
-				else:
-					LISTA_F3.append((int(C),"PF3",EVENTO[2]))
-					LISTA_F3 = sorted(LISTA_F3, key=lambda element: (element[2], element[0]))
+				if(int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][6]) != 0):
+
+					if (ESTADO_F3 == "LIVRE"):
+						ESTADO_F3="OCUPADO"
+						PARTIDA_F3 = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][6])
+						LISTA_EVENTO.append((int(PARTIDA_F3),"PF3",EVENTO[2]))
+						LISTA_EVENTO = sorted(LISTA_EVENTO, key=lambda element: (element[0], element[2]))
+					else:
+						LISTA_F3.append((int(C),"PF3",EVENTO[2]))
+						LISTA_F3 = sorted(LISTA_F3, key=lambda element: (element[2], element[0]))
 
 				if(len(LISTA_F2C) != 0):
 					EVENTO = LISTA_F2C.pop(0)
@@ -279,8 +293,13 @@ with open('sistema.csv', mode='w') as tabela_sistema:
 						LISTA_F3 = sorted(LISTA_F3, key=lambda element: (element[2], element[0]))
 
 				if(len(LISTA_F1) != 0):
+					LISTA_F1 = sorted(LISTA_F1, key=lambda element: (element[2], element[0]))
 					EVENTO = LISTA_F1.pop(0)
 					ESTADO_F1="OCUPADO"
+					#print(f'EVENTO[2]-{EVENTO[2]}')
+					#print(f'EVENTO[2].split(" ")-{EVENTO[2].split(" ")}')
+					#print(f'EVENTO[2].split(" ")[1]-{EVENTO[2].split(" ")[1]}')
+					#print(f'lista_utentes[int(EVENTO[2].split(" ")[1])-1]{lista_utentes[int(EVENTO[2].split(" ")[1])-1]}')
 					PARTIDA_F1 = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][2])
 					LISTA_EVENTO.append((int(PARTIDA_F1),"PF1",EVENTO[2]))
 					LISTA_EVENTO = sorted(LISTA_EVENTO, key=lambda element: (element[0], element[2]))
@@ -294,7 +313,8 @@ with open('sistema.csv', mode='w') as tabela_sistema:
 					LISTA_EVENTO.append((int(PARTIDA_F1),"PF1",EVENTO[2]))
 					LISTA_EVENTO = sorted(LISTA_EVENTO, key=lambda element: (element[0], element[2]))
 				else :
-					LISTA_F1.append((int(C),"PF1",EVENTO[2]))
+					print(f'INDEX_PROX_UTENTE-{INDEX_PROX_UTENTE-1}')
+					LISTA_F1.append((int(C),"PF1",UTENTE)) #lista_utentes[INDEX_PROX_UTENTE-1][0]
 					LISTA_F1 = sorted(LISTA_F1, key=lambda element: (element[2], element[0]))
 			else:
 				print("CORREU MAL ALGUMA COISA")
@@ -326,3 +346,4 @@ with open('sistema.csv', mode='w') as tabela_sistema:
 		else:
 			C += 1
 		#print(C)
+print(f'foi criado um ficheiro -> \"{file_to_write}\"\n com a INFORMACAO DE CADA PASSO DADO no sistema \nApartir dos dados gerados , que são lidos \ndo ficheiro -> \"{file_to_read}\"')
