@@ -108,21 +108,66 @@ with open(file_to_write, mode='w') as tabela_sistema:
 			if (EVENTO[1] == "PF3") :
 				ESTADO_F3="LIVRE"
 				PARTIDA_F3 = "-"
-				LISTA_F3.sort(key=lambda tup: tup[0])
+				LISTA_F3 = sorted(LISTA_F3, key=lambda element: (element[2], element[0]))
 				if(len(LISTA_F3) != 0):
 					EVENTO = LISTA_F3.pop(0)
 					ESTADO_F3="OCUPADO"
 					PARTIDA_F3 = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][6])
 					LISTA_EVENTO.append((int(PARTIDA_F3),"PF3",EVENTO[2]))
 					LISTA_EVENTO = sorted(LISTA_EVENTO, key=lambda element: (element[0], element[2]))
-
+#pode estra sujeito a alteração
+				if (lista_utentes[int(EVENTO[2].split(" ")[1])-1][4] == "SIM"):
+					lista_utentes[int(EVENTO[2].split(" ")[1])-1][4] = "NAO"
+					lista_utentes[int(EVENTO[2].split(" ")[1])-1][6] = 0
+					if (lista_utentes[int(EVENTO[2].split(" ")[1])-1][5] == "A") :
+						print(f'valor do assunto A {lista_utentes[int(EVENTO[2].split(" ")[1])-1][5]}')
+						if (ESTADO_F2A1 == "LIVRE"):
+							ESTADO_F2A1="OCUPADO"
+							PARTIDA_F2A1 = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][3])
+							LISTA_EVENTO.append((int(PARTIDA_F2A1),"PF2A1","Q "+EVENTO[2].split(" ")[1]))
+							LISTA_EVENTO = sorted(LISTA_EVENTO, key=lambda element: (element[0], element[2]))
+						elif (ESTADO_F2A2 == "LIVRE") :
+							ESTADO_F2A2="OCUPADO"
+							PARTIDA_F2A2 = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][3])
+							LISTA_EVENTO.append((int(PARTIDA_F2A2),"PF2A2","Q "+EVENTO[2].split(" ")[1]))
+							LISTA_EVENTO = sorted(LISTA_EVENTO, key=lambda element: (element[0], element[2]))
+						else:
+							LISTA_F2A.append((int(C),"PF2A","Q "+EVENTO[2].split(" ")[1]))
+							LISTA_F2A = sorted(LISTA_F2A, key=lambda element: (element[2], element[0]))
+					elif (lista_utentes[int(EVENTO[2].split(" ")[1])-1][5] == "B") :
+						print(f'valor do assunto B {lista_utentes[int(EVENTO[2].split(" ")[1])-1][5]}')
+						if (ESTADO_F2B1 == "LIVRE"):
+							ESTADO_F2B1="OCUPADO"
+							PARTIDA_F2B1 = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][3])
+							LISTA_EVENTO.append((int(PARTIDA_F2B1),"PF2B1","Q "+EVENTO[2].split(" ")[1]))
+							LISTA_EVENTO = sorted(LISTA_EVENTO, key=lambda element: (element[0], element[2]))
+						elif (ESTADO_F2B2 == "LIVRE") :
+							ESTADO_F2B2="OCUPADO"
+							PARTIDA_F2B2 = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][3])
+							LISTA_EVENTO.append((int(PARTIDA_F2B2),"PF2B2","Q "+EVENTO[2].split(" ")[1]))
+							LISTA_EVENTO = sorted(LISTA_EVENTO, key=lambda element: (element[0], element[2]))
+						else:
+							LISTA_F2B.append((int(C),"PF2B","Q "+EVENTO[2].split(" ")[1]))
+							LISTA_F2B = sorted(LISTA_F2B, key=lambda element: (element[2], element[0]))
+					elif (lista_utentes[int(EVENTO[2].split(" ")[1])-1][5] == "C") :
+						print(f'valor do assunto C {lista_utentes[int(EVENTO[2].split(" ")[1])-1][5]}')
+						if (ESTADO_F2C == "LIVRE"):
+							ESTADO_F2C="OCUPADO"
+							PARTIDA_F2C = C+ int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][3])
+							LISTA_EVENTO.append((int(PARTIDA_F2C),"PF2C","Q "+EVENTO[2].split(" ")[1]))
+							LISTA_EVENTO = sorted(LISTA_EVENTO, key=lambda element: (element[0], element[2]))
+						else:
+							LISTA_F2C.append((int(C),"PF2C","Q "+EVENTO[2].split(" ")[1]))
+							LISTA_F2C = sorted(LISTA_F2C, key=lambda element: (element[2], element[0]))
+					else:        #ASSUNTO -, nao passa por esta fase, vai para a fase 3
+						print("alguem saio do sistema")
 
 			elif (EVENTO[1] == "PF2A1") :
 				ESTADO_F2A1="LIVRE"
 				PARTIDA_F2A1 = "-"
-				LISTA_F2A.sort(key=lambda tup: tup[0])
+				LISTA_F2A = sorted(LISTA_F2A, key=lambda element: (element[2], element[0]))
 
-				if(int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][6]) != 0):
+				if(int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][6]) != 0):   #se o tempo da fase 3 for diferente de zero, vai para a fase 3 isto é feito sempre que sai da fase 2
 				
 					if (ESTADO_F3 == "LIVRE"):
 						ESTADO_F3="OCUPADO"
@@ -144,7 +189,7 @@ with open(file_to_write, mode='w') as tabela_sistema:
 			elif (EVENTO[1] == "PF2A2") :
 				ESTADO_F2A2="LIVRE"
 				PARTIDA_F2A2 = "-"
-				LISTA_F2A.sort(key=lambda tup: tup[0])
+				LISTA_F2A = sorted(LISTA_F2A, key=lambda element: (element[2], element[0]))
 				
 				if(int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][6]) != 0):
 
@@ -167,7 +212,7 @@ with open(file_to_write, mode='w') as tabela_sistema:
 			elif (EVENTO[1] == "PF2B1") :
 				ESTADO_F2B1="LIVRE"
 				PARTIDA_F2B1 = "-"
-				LISTA_F2B.sort(key=lambda tup: tup[0])
+				LISTA_F2B = sorted(LISTA_F2B, key=lambda element: (element[2], element[0]))
 				
 				if(int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][6]) != 0):
 
@@ -190,7 +235,7 @@ with open(file_to_write, mode='w') as tabela_sistema:
 			elif (EVENTO[1] == "PF2B2") :
 				ESTADO_F2B2="LIVRE"
 				PARTIDA_F2B2 = "-"
-				LISTA_F2B.sort(key=lambda tup: tup[0])
+				LISTA_F2B = sorted(LISTA_F2B, key=lambda element: (element[2], element[0]))
 				
 				if(int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][6]) != 0):
 
@@ -214,7 +259,7 @@ with open(file_to_write, mode='w') as tabela_sistema:
 			elif (EVENTO[1] == "PF2C") :
 				ESTADO_F2C="LIVRE"
 				PARTIDA_F2C = "-"
-				LISTA_F2C.sort(key=lambda tup: tup[0])
+				LISTA_F2C = sorted(LISTA_F2C, key=lambda element: (element[2], element[0]))
 				
 				if(int (lista_utentes[int(EVENTO[2].split(" ")[1])-1][6]) != 0):
 
