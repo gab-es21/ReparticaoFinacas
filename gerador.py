@@ -63,35 +63,35 @@ with open('tabela_utentes.csv', mode='w') as tabela_utentes:
 		#calculo do tempo na fase 1
 		r1=random.randint(1,100)
 		if r1<=55 :           					# ]0,1]           55%
-			f1=1
+			f1=random.randint(1,1*60)
 		elif r1 <= (55+35) : 					# ]1,2]           35% 
-			f1=2
+			f1=random.randint(1*60+1,2*60)
 		else:                 					# ]2,3]           10% 
-			f1=3
+			f1=random.randint(2*60+1,3*60)
 		#calculo do tempo na fase 2
 		if assunto == "A":
 			r1=random.randint(1,100)
 			if r1<=25 :          				# ]00,05]         25%
-				r2=random.randint(1,5)
+				r2=random.randint(1,5*60)
 				f2=r2
 			elif r1 <= (25+35) :  				# ]05,15]         35% 
-				r2=random.randint(6,15)
+				r2=random.randint(5*60+1,15*60)
 				f2=r2
 			elif r1 <= (25+35+30) :  			# ]15,25]         30% 
-				r2=random.randint(16,25)
+				r2=random.randint(15*60+1,25*60)
 				f2=r2
 			else:                               # ]25,30]         10% 
-				r2=random.randint(26,30)
+				r2=random.randint(25*60+1,30*60)
 				f2=r2
 			r3=random.randint(1,100)
 			if r3<=20 :                     ## 20%  passam pela fase 3
 				r4=random.randint(1,100)
 				if r4<=40:               # ]0,1]           40%
-					f3=1
+					f3=random.randint(1,1*60)
 				elif r4 <=(40+55):       # ]1,2]           95% 
-					f3=2
-				else:
-					f3=3                 # ]2,3]            5% 
+					f3=random.randint(1*60+1,2*60)
+				else:                    # ]2,3]            5% 
+					f3=random.randint(2*60+1,3*60)               
 				r5=random.randint(1,100)
 				if r4<=70:              #   70% abandona na fase 3
 					f2r="NAO"
@@ -104,26 +104,26 @@ with open('tabela_utentes.csv', mode='w') as tabela_utentes:
 		elif assunto == "B":
 			r1=random.randint(1,100)
 			if r1<=25 :          				# ]00,05]         25%
-				r2=random.randint(1,5)
+				r2=random.randint(1,5*60)
 				f2=r2
 			elif r1 <= (25+45) :  				# ]05,10]         45% 
-				r2=random.randint(6,10)
+				r2=random.randint(5*60+1,10*60)
 				f2=r2
 			elif r1 <= (25+45+25) :  			# ]10,15]         25% 
-				r2=random.randint(11,15)
+				r2=random.randint(10*60+1,15*60)
 				f2=r2
 			else:                               # ]15,25]         05% 
-				r2=random.randint(16,25)
+				r2=random.randint(15*60+1,25*60)
 				f2=r2
 			r3=random.randint(1,100)
 			if r3<=30 :                     ## 30%  passam pela fase 3
 				r4=random.randint(1,100)
 				if r4<=40:               # ]0,1]           40%
-					f3=1
+					f3=random.randint(1,1*60)
 				elif r4 <=(40+55):       # ]1,2]           95% 
-					f3=2
+					f3=random.randint(1*60+1,2*60)
 				else:
-					f3=3                 # ]2,3]            5% 
+					f3=random.randint(2*60+1,3*60)               # ]2,3]            5% 
 				r5=random.randint(1,100)
 				if r4<=80:              #   80% abandona na fase 3
 					f2r="NAO"
@@ -136,26 +136,26 @@ with open('tabela_utentes.csv', mode='w') as tabela_utentes:
 		elif assunto == "C":            #Assunto C
 			r1=random.randint(1,100)
 			if r1<=10 :          				# ]00,05]         10%
-				r2=random.randint(1,5)
+				r2=random.randint(1,5*60)
 				f2=r2
 			elif r1 <= (10+35) :  				# ]05,10]         35% 
-				r2=random.randint(6,10)
-				f2=r2
+				r2=random.randint(5*60+1,10*60)
+				f2=r2*60
 			elif r1 <= (10+35+45) :  			# ]10,15]         45% 
-				r2=random.randint(11,15)
-				f2=r2
+				r2=random.randint(10*60+1,15*60)
+				f2=r2*60
 			else:                               # ]15,20]         10% 
-				r2=random.randint(16,20)
-				f2=r2
+				r2=random.randint(15*60+1,20*60)
+				f2=r2*60
 			r3=random.randint(1,100)
 			if r3<=75 :                     ## 75%  passam pela fase 3
 				r4=random.randint(1,100)
 				if r4<=40:               # ]0,1]           40%
-					f3=1
+					f3=random.randint(1,1*60)
 				elif r4 <=(40+55):       # ]1,2]           55% 
-					f3=2
+					f3=random.randint(1*60+1,2*60)
 				else:
-					f3=3                 # ]2,3]            5% 
+					f3=random.randint(2*60+1,3*60)                 # ]2,3]            5% 
 				r5=random.randint(1,100)
 				if r4<=60:              #   60% abandona na fase 3
 					f2r="NAO"
@@ -169,11 +169,11 @@ with open('tabela_utentes.csv', mode='w') as tabela_utentes:
 
 			r4=random.randint(1,100)
 			if r4<=40:               # ]0,1]           40%
-				f3=1
+				f3=random.randint(1,1*60)
 			elif r4 <=(40+55):       # ]1,2]           55% 
-				f3=2
+				f3=random.randint(1*60+1,2*60)
 			else:
-				f3=3                 # ]2,3]            5% 
+				f3=random.randint(2*60+1,3*60)                # ]2,3]            5% 
 			f2r="NAO"
 		
 		
