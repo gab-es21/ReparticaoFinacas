@@ -20,17 +20,20 @@ with open(file_to_read) as csv_file:
             #print(f' {", ".join(row)}')
             line_count += 1
         else:
-            #print(f'  U- {row[0]}   CH- {row[1]}   TF1- {row[2]}   TF2- {row[3]}   RF2- {row[4]}   A- {row[5]}   TF3- {row[6]}')
-            utente_lst=[]
-            utente_lst.append(row[0])
-            utente_lst.append(row[1])
-            utente_lst.append(row[2])
-            utente_lst.append(row[3])
-            utente_lst.append(row[4])
-            utente_lst.append(row[5])
-            utente_lst.append(row[6])
-            lista_utentes.append(utente_lst)
-            line_count += 1
+            try:
+            	#print(f'  U- {row[0]}   CH- {row[1]}   TF1- {row[2]}   TF2- {row[3]}   RF2- {row[4]}   A- {row[5]}   TF3- {row[6]}')
+                utente_lst=[]
+                utente_lst.append(row[0])
+                utente_lst.append(row[1])
+                utente_lst.append(row[2])
+                utente_lst.append(row[3])
+                utente_lst.append(row[4])
+                utente_lst.append(row[5])
+                utente_lst.append(row[6])
+                lista_utentes.append(utente_lst)
+                line_count += 1
+            except:
+                print("linha branca")
 print(f' -> {line_count} Utentes passarão pelo Sistema')
 #print(lista_utentes)
 with open(file_to_write, mode='w') as tabela_sistema:
@@ -702,3 +705,4 @@ file_estatisticas.write(f'TdO A1 TT = {("%.3f" % TT_A1)}%   \tTdO A2 TT = {("%.3
 #estatisticas_writer.writerow({})
 
 file_estatisticas.close()
+			
